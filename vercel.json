@@ -1,0 +1,8 @@
+{
+  "redirects": [
+    { "source": "/blog", "destination": "/productos", "permanent": true },
+    { "source": "/blog/:slug", "destination": "/productos/:slug", "permanent": true },
+    { "source": "/elements", "destination": "/empresa", "permanent": true },
+    { "source": "/contact", "destination": "/contacto", "permanent": true }
+  ]
+}
