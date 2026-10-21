@@ -4,6 +4,8 @@
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // /productos se sirve sin barra final, igual que las direcciones que ve Google
+    "html_handling": "drop-trailing-slash"
   }
 }
