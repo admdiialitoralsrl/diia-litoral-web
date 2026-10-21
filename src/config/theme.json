@@ -1,0 +1,26 @@
+{
+  "colors": {
+    "default": {
+      "theme_color": {
+        "primary": "#fc4c02",
+        "body": "#fff",
+        "border": "#ebe7e4",
+        "light": "#f7f4f2"
+      },
+      "text_color": {
+        "text": "#555b61",
+        "text-dark": "#1d252d"
+      }
+    }
+  },
+  "fonts": {
+    "font_family": {
+      "primary": "Lato:wght@300;400;700;900",
+      "primary_type": "sans-serif"
+    },
+    "font_size": {
+      "base": "16",
+      "scale": "1.2"
+    }
+  }
+}

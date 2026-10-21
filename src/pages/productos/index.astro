@@ -1,0 +1,104 @@
+---
+import { Image } from "astro:assets";
+import Base from "@/layouts/Base.astro";
+import CtaContacto from "@/components/CtaContacto.astro";
+import { lineas } from "@/data/productos";
+import { foto } from "@/lib/imagenes";
+
+const filtros = ["Todas", "Alimenticia", "Farmacéutica", "Cosmética"];
+---
+
+<Base
+  title="Productos"
+  description="Líneas de insumos químicos de Diia Litoral: acidulantes, conservantes, colorantes, emulsionantes, gelificantes, endulzantes, humectantes y más."
+>
+  <section class="section pb-10">
+    <div class="container">
+      <div class="mx-auto max-w-[720px] text-center">
+        <p class="eyebrow">Productos</p>
+        <h1 class="mt-3 font-bold">Nuestras líneas de producto</h1>
+        <p class="lead mt-4">Insumos y aditivos para la industria. Consúltenos por grados, presentaciones y disponibilidad.</p>
+      </div>
+      <div class="mt-8 flex flex-wrap justify-center gap-2" role="group" aria-label="Filtrar por industria">
+        {
+          filtros.map((f, i) => (
+            <button type="button" class:list={["filtro", { activo: i === 0 }]} data-filtro={f} aria-pressed={i === 0 ? "true" : "false"}>
+              {f}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-[70px]">
+    <div class="container">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" id="grilla-productos">
+        {
+          lineas.map((l) => (
+            <a href={`/productos/${l.slug}`} class="producto-card" data-industrias={l.industrias.join("|")}>
+              <div class="media">
+                <Image src={foto(l.imagen)} widths={[400, 700]} sizes="(max-width: 640px) 100vw, 360px" alt={l.nombre} loading="lazy" />
+              </div>
+              <div class="body">
+                <h2 class="h5">{l.nombre}</h2>
+                <p class="text-[15px]">{l.resumen}</p>
+                <div class="mt-1 flex flex-wrap gap-1.5">
+                  {l.industrias.map((i) => <span class="chip">{i}</span>)}
+                </div>
+                <span class="mas">
+                  Ver productos
+                  <img src="/images/arrow-right.svg" width="16" height="12" alt="" />
+                </span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaContacto titulo="¿No encuentra el insumo que busca?" texto="Cuéntenos su aplicación y le buscamos la solución, aunque no figure en esta lista." mensaje="Hola Diia Litoral, busco un insumo que no veo en el catálogo." />
+</Base>
+
+<style>
+  .filtro {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-text-dark);
+    background: #fff;
+    transition: all 0.2s;
+  }
+  .filtro:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  .filtro.activo {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+</style>
+
+<script>
+  function initFiltros() {
+    const botones = document.querySelectorAll<HTMLButtonElement>(".filtro");
+    const tarjetas = document.querySelectorAll<HTMLElement>("#grilla-productos .producto-card");
+    botones.forEach((b) =>
+      b.addEventListener("click", () => {
+        const f = b.dataset.filtro!;
+        botones.forEach((x) => {
+          x.classList.toggle("activo", x === b);
+          x.setAttribute("aria-pressed", String(x === b));
+        });
+        tarjetas.forEach((t) => {
+          t.hidden = f !== "Todas" && !t.dataset.industrias!.split("|").includes(f);
+        });
+      }),
+    );
+  }
+  document.addEventListener("astro:page-load", initFiltros);
+</script>

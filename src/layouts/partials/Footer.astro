@@ -1,0 +1,53 @@
+---
+import Social from "@/components/Social.astro";
+import config from "@/config/config.json";
+import menu from "@/config/menu.json";
+import social from "@/config/social.json";
+import { lineas } from "@/data/productos";
+
+const { footer_content, copyright } = config.params;
+const c = config.contacto;
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" aria-label="Diia Litoral SRL, inicio">
+          <img src={config.site.logo_dark} width="200" height="53" alt="Diia Litoral SRL" class="footer-logo" />
+        </a>
+        <p class="mt-4">{footer_content}</p>
+        <Social source={social.main} className="social-icons mt-5" />
+      </div>
+
+      <div>
+        <p class="footer-title">Navegación</p>
+        <ul class="footer-list">
+          {menu.main.map((m) => <li><a href={m.url}>{m.name}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-title">Productos</p>
+        <ul class="footer-list">
+          {lineas.slice(0, 6).map((l) => <li><a href={`/productos/${l.slug}`}>{l.nombre}</a></li>)}
+          <li><a href="/productos" class="text-primary">Ver todos</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-title">Contacto</p>
+        <ul class="footer-list">
+          <li><span class="footer-label">Oficina central</span>{c.ubicacion}</li>
+          <li><span class="footer-label">WhatsApp</span><a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">{c.whatsapp_texto}</a></li>
+          <li><span class="footer-label">Ventas</span><a href={`mailto:${c.email_ventas}`}>{c.email_ventas}</a></li>
+          <li><span class="footer-label">Administración</span><a href={`mailto:${c.email_administracion}`}>{c.email_administracion}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© {year} {copyright}</p>
+    </div>
+  </div>
+</footer>

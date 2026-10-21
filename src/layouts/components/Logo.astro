@@ -1,0 +1,8 @@
+---
+import config from "@/config/config.json";
+const { logo, logo_width, logo_height, title } = config.site;
+---
+
+<a href="/" class="navbar-brand block" aria-label={`${title}, inicio`}>
+  <img src={logo} width={logo_width} height={logo_height} alt={title} class="h-[46px] w-auto md:h-[53px]" />
+</a>

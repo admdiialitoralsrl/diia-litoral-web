@@ -1,0 +1,31 @@
+---
+import Icono from "@/components/Icono.astro";
+import config from "@/config/config.json";
+import { waLink } from "@/data/productos";
+
+const {
+  titulo = "¿Necesita un insumo o asesoramiento para su formulación?",
+  texto = "Cuéntenos qué está desarrollando: lo ayudamos a elegir el producto adecuado, ya sea estándar o a medida.",
+  mensaje = "Hola Diia Litoral, quisiera hacer una consulta.",
+} = Astro.props;
+---
+
+<section class="section">
+  <div class="container">
+    <div class="cta-banda">
+      <div class="grid items-center gap-8 md:grid-cols-[1.5fr_1fr]">
+        <div>
+          <h2 class="h3 md:h2">{titulo}</h2>
+          <p class="mt-4 text-white/90">{texto}</p>
+        </div>
+        <div class="flex flex-wrap gap-3 md:justify-end">
+          <a class="btn-blanco" href={waLink(config.contacto.whatsapp, mensaje)} target="_blank" rel="noopener">
+            <span class="h-5 w-5 text-[#25d366]"><Icono nombre="whatsapp" /></span>
+            WhatsApp
+          </a>
+          <a class="btn-borde" href="/contacto">Contáctenos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,5 @@
+# Direcciones del sitio anterior -> páginas nuevas
+/blog          /productos          301
+/blog/:slug    /productos/:slug    301
+/elements      /empresa            301
+/contact       /contacto           301

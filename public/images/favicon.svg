@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 213 213">
+<defs><mask id="burbujas" maskUnits="userSpaceOnUse" x="40" y="50" width="130" height="110"><rect x="40" y="50" width="130" height="110" fill="#fff"/><circle cx="117.3" cy="122.7" r="11.8" fill="#000"/><circle cx="89.6" cy="111.1" r="8" fill="#000"/><circle cx="105.5" cy="94.9" r="3.8" fill="#000"/></mask></defs>
+<path fill="#12222B" d="M81.77 2.77A103.9 103.9 0 1 0 204.63 125.63L180.65 101.65A77.8 77.8 0 1 1 105.75 26.75Z"/>
+<path fill="#E94F1A" d="M104 1.4L206.6 1.4L206.6 104L183.3 80.7L183.3 24.7L127.3 24.7Z"/>
+<g fill="#E94F1A" stroke="#E94F1A" stroke-width="2.4" stroke-linejoin="round" mask="url(#burbujas)">
+<rect x="76.1" y="59.4" width="54.4" height="17.1" rx="7"/>
+<path d="M84.6 70L122 70L122 91.2L149.8 118.6L149.8 146.4L56.8 146.4L56.8 118.6L84.6 91.2Z"/>
+</g>
+</svg>

@@ -1,0 +1,50 @@
+{
+  "site": {
+    "title": "Diia Litoral SRL",
+    "base_url": "https://diialitoral.com",
+    "base_path": "/",
+    "trailing_slash": false,
+    "favicon": "/images/favicon.png",
+    "logo": "/images/logo-diia-litoral.svg",
+    "logo_dark": "/images/logo-diia-litoral-blanco.svg",
+    "logo_width": "200",
+    "logo_height": "53",
+    "logo_text": "Diia Litoral SRL"
+  },
+
+  "settings": {
+    "pagination": 12,
+    "summary_length": 200
+  },
+
+  "nav_button": {
+    "enable": true,
+    "label": "Pedir cotización",
+    "link": "/contacto"
+  },
+
+  "contacto": {
+    "whatsapp": "5493425662160",
+    "whatsapp_texto": "+54 9 342 566-2160",
+    "email_ventas": "ventas@diialitoral.com",
+    "email_administracion": "administracion@diialitoral.com",
+    "ubicacion": "Santa Fe, Argentina",
+    "linkedin": "https://www.linkedin.com/company/diia-litoral-srl/"
+  },
+
+  "params": {
+    "footer_content": "Distribuidora de insumos químicos para la industria alimenticia, farmacéutica, cosmética y de tratamiento de aguas. Desde 2006, con asesoramiento técnico especializado.",
+    "copyright": "Diia Litoral SRL · Santa Fe, Argentina"
+  },
+
+  "metadata": {
+    "meta_author": "Diia Litoral SRL",
+    "meta_image": "/images/og-diia-litoral.jpg",
+    "google_site_verification": "",
+    "meta_description": "Diia Litoral SRL distribuye insumos químicos y aditivos para la industria alimenticia, farmacéutica, cosmética y de tratamiento de aguas, con asesoramiento técnico. Santa Fe, Argentina, desde 2006."
+  },
+  "google_tag_manager": {
+    "enable": false,
+    "gtm_id": "GTM-XXXXXX"
+  }
+}

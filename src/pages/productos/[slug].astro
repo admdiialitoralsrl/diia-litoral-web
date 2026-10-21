@@ -1,0 +1,101 @@
+---
+import { Image, getImage } from "astro:assets";
+import Base from "@/layouts/Base.astro";
+import Icono from "@/components/Icono.astro";
+import config from "@/config/config.json";
+import { lineas, waLink, type Linea } from "@/data/productos";
+import { foto } from "@/lib/imagenes";
+
+export function getStaticPaths() {
+  return lineas.map((linea) => ({ params: { slug: linea.slug }, props: { linea } }));
+}
+
+const { linea } = Astro.props as { linea: Linea };
+const otras = lineas.filter((l) => l.slug !== linea.slug).slice(0, 3);
+const consulta = waLink(config.contacto.whatsapp, `Hola Diia Litoral, quisiera consultar por ${linea.nombre.toLowerCase()}.`);
+const og = await getImage({ src: foto(linea.imagen), width: 1200, format: "jpg" });
+const esDetalle = linea.grupos.some((g) => g.items.some((i) => i.includes(" · ")));
+---
+
+<Base title={linea.nombre} description={linea.descripcion} image={og.src}>
+  <section class="section pb-10">
+    <div class="container">
+      <nav class="text-sm" aria-label="Ruta">
+        <a href="/productos" class="font-bold text-primary">Productos</a>
+        <span class="mx-2 text-text/60">/</span>
+        <span>{linea.nombre}</span>
+      </nav>
+      <div class="mt-6 items-center gap-12 md:grid md:grid-cols-2">
+        <div class="hero-media">
+          <Image src={foto(linea.imagen)} widths={[500, 800, 1100]} sizes="(max-width: 768px) 100vw, 540px" alt={linea.nombre} loading="eager" />
+        </div>
+        <div class="mt-8 md:mt-0">
+          <h1 class="h2 font-bold">{linea.nombre}</h1>
+          <p class="lead mt-4">{linea.descripcion}</p>
+          <div class="mt-5 flex flex-wrap gap-1.5">
+            {linea.industrias.map((i) => <span class="chip">Industria {i.toLowerCase()}</span>)}
+          </div>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a class="btn btn-primary inline-flex items-center gap-2" href={consulta} target="_blank" rel="noopener">
+              <span class="h-5 w-5"><Icono nombre="whatsapp" /></span> Consultar por WhatsApp
+            </a>
+            <a class="btn btn-outline-primary" href={`mailto:${config.contacto.email_ventas}?subject=${encodeURIComponent("Consulta: " + linea.nombre)}`}>Escribir a ventas</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-light">
+    <div class="container">
+      <div class="mx-auto max-w-[920px]">
+        <h2 class="h3">Productos disponibles</h2>
+        {
+          linea.grupos.map((g) => (
+            <div class="mt-8">
+              {g.titulo && <h3 class="h5 mb-4">{g.titulo}</h3>}
+              <ul class:list={["item-list", { detalle: esDetalle }]}>
+                {g.items.map((item) => {
+                  const [codigo, usos] = item.split(" · ");
+                  return usos ? (
+                    <li>
+                      <strong class="text-text-dark">{codigo}</strong>
+                      <span class="mt-0.5 block text-sm text-text">{usos}</span>
+                    </li>
+                  ) : (
+                    <li>{item}</li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))
+        }
+        <p class="mt-8 text-sm">¿Necesita otro grado, presentación o ficha técnica? <a class="font-bold text-primary" href={consulta} target="_blank" rel="noopener">Consúltenos</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 class="h3">Otras líneas de producto</h2>
+        <a href="/productos" class="font-bold text-primary">Ver todas</a>
+      </div>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          otras.map((l) => (
+            <a href={`/productos/${l.slug}`} class="producto-card">
+              <div class="media">
+                <Image src={foto(l.imagen)} widths={[400, 700]} sizes="(max-width: 640px) 100vw, 360px" alt={l.nombre} loading="lazy" />
+              </div>
+              <div class="body">
+                <h3 class="h5">{l.nombre}</h3>
+                <p class="text-[15px]">{l.resumen}</p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

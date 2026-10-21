@@ -1,0 +1,124 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icono from "@/components/Icono.astro";
+import config from "@/config/config.json";
+import { lineas } from "@/data/productos";
+
+const c = config.contacto;
+---
+
+<Base
+  title="Contacto"
+  description="Contacte a Diia Litoral SRL por WhatsApp o correo para cotizaciones y asesoramiento técnico. Santa Fe, Argentina."
+>
+  <section class="section">
+    <div class="container">
+      <div class="mx-auto max-w-[720px] text-center">
+        <p class="eyebrow">Contacto</p>
+        <h1 class="mt-3 font-bold">Le ayudamos a encontrar la respuesta que busca</h1>
+        <p class="lead mt-4">
+          Cuéntenos qué necesita, ya sea la aplicación de un producto estándar o un desarrollo a medida. Si no encontró la solución entre nuestros productos, igual lo ayudamos a encontrarla.
+        </p>
+      </div>
+
+      <div class="mt-12 gap-10 lg:grid lg:grid-cols-[1.25fr_1fr]">
+        <form class="form-diia rounded-3xl border border-border bg-white p-6 shadow md:p-9" id="form-contacto" novalidate>
+          <h2 class="h4">Pedido de cotización o consulta</h2>
+          <div class="mt-6 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="c-nombre">Nombre y apellido</label>
+              <input id="c-nombre" class="form-input" name="nombre" autocomplete="name" required />
+            </div>
+            <div>
+              <label for="c-empresa">Empresa</label>
+              <input id="c-empresa" class="form-input" name="empresa" autocomplete="organization" />
+            </div>
+            <div>
+              <label for="c-industria">Industria</label>
+              <select id="c-industria" class="form-select" name="industria">
+                <option>Alimenticia</option>
+                <option>Farmacéutica</option>
+                <option>Cosmética</option>
+                <option>Tratamiento de aguas</option>
+                <option>Otra</option>
+              </select>
+            </div>
+            <div>
+              <label for="c-linea">Línea de producto</label>
+              <select id="c-linea" class="form-select" name="linea">
+                <option>No estoy seguro</option>
+                {lineas.map((l) => <option>{l.nombre}</option>)}
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="c-mensaje">¿Qué necesita?</label>
+              <textarea id="c-mensaje" class="form-textarea" name="mensaje" rows="5" required placeholder="Producto, cantidad aproximada y para qué aplicación lo necesita."></textarea>
+            </div>
+          </div>
+          <p id="c-error" class="mt-4 text-sm font-bold text-[#c0392b]" hidden>Complete su nombre y su consulta para enviarla.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a id="c-wa" class="btn btn-primary inline-flex items-center gap-2" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">
+              <span class="h-5 w-5"><Icono nombre="whatsapp" /></span> Enviar por WhatsApp
+            </a>
+            <a id="c-mail" class="btn btn-outline-primary" href={`mailto:${c.email_ventas}`}>Enviar por correo</a>
+          </div>
+          <p class="mt-3 text-sm">Se abre WhatsApp o su correo con la consulta ya escrita, lista para enviar a nuestro equipo de ventas.</p>
+        </form>
+
+        <div class="mt-10 grid content-start gap-4 lg:mt-0">
+          <div class="dato-contacto">
+            <span class="ico"><Icono nombre="whatsapp" /></span>
+            <div><small>WhatsApp</small><a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">{c.whatsapp_texto}</a></div>
+          </div>
+          <div class="dato-contacto">
+            <span class="ico"><Icono nombre="mail" /></span>
+            <div><small>Ventas</small><a href={`mailto:${c.email_ventas}`}>{c.email_ventas}</a></div>
+          </div>
+          <div class="dato-contacto">
+            <span class="ico"><Icono nombre="mail" /></span>
+            <div><small>Administración</small><a href={`mailto:${c.email_administracion}`}>{c.email_administracion}</a></div>
+          </div>
+          <div class="dato-contacto">
+            <span class="ico"><Icono nombre="ubicacion" /></span>
+            <div><small>Oficina central</small><span class="valor">{c.ubicacion}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script define:vars={{ wa: c.whatsapp, mail: c.email_ventas }}>
+  function initForm() {
+    const form = document.getElementById("form-contacto");
+    if (!form) return;
+    const v = (id) => document.getElementById(id).value.trim();
+    const linkWa = document.getElementById("c-wa");
+    const linkMail = document.getElementById("c-mail");
+    const error = document.getElementById("c-error");
+    const actualizar = () => {
+      const texto = [
+        "Hola Diia Litoral, quisiera hacer una consulta.",
+        v("c-nombre") && "Nombre: " + v("c-nombre"),
+        v("c-empresa") && "Empresa: " + v("c-empresa"),
+        "Industria: " + v("c-industria"),
+        "Línea de producto: " + v("c-linea"),
+        v("c-mensaje") && "Consulta: " + v("c-mensaje"),
+      ].filter(Boolean).join("\n");
+      linkWa.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(texto);
+      linkMail.href = "mailto:" + mail + "?subject=" + encodeURIComponent("Consulta web" + (v("c-nombre") ? " de " + v("c-nombre") : "")) + "&body=" + encodeURIComponent(texto);
+    };
+    const validar = (e) => {
+      const falta = !v("c-nombre") || !v("c-mensaje");
+      error.hidden = !falta;
+      if (falta) e.preventDefault();
+    };
+    form.addEventListener("input", actualizar);
+    form.addEventListener("change", actualizar);
+    form.addEventListener("submit", (e) => e.preventDefault());
+    linkWa.addEventListener("click", validar);
+    linkMail.addEventListener("click", validar);
+    actualizar();
+  }
+  document.addEventListener("astro:page-load", initForm);
+</script>

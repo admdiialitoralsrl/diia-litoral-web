@@ -1,0 +1,8 @@
+{
+  "main": [
+    { "name": "Inicio", "url": "/" },
+    { "name": "Productos", "url": "/productos" },
+    { "name": "Empresa", "url": "/empresa" },
+    { "name": "Contacto", "url": "/contacto" }
+  ]
+}
