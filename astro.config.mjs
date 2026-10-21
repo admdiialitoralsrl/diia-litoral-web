@@ -48,11 +48,9 @@ const fontsConfig = Object.entries(theme.fonts.font_family)
 
 // https://astro.build/config
 export default defineConfig({
-  // En Vercel toma sola la dirección de producción: la de vercel.app mientras no haya
-  // dominio propio, y diialitoral.com en cuanto se conecte. Fuera de Vercel usa config.json.
-  site: process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : config.site.base_url,
+  // Dirección oficial del sitio (la que ve Google). Se define con la variable SITE_URL
+  // en Cloudflare Pages; si no está, usa la de config.json.
+  site: process.env.SITE_URL || config.site.base_url,
   base: config.site.base_path ? config.site.base_path : "/",
   trailingSlash: config.site.trailing_slash ? "always" : "never",
   image: { service: sharpImageService() },

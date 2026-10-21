@@ -14,9 +14,12 @@ npm install --legacy-peer-deps
 npm run dev
 ```
 
-## Publicar en Vercel
+## Publicar en Cloudflare Pages
 1. Subir esta carpeta a un repositorio de GitHub de la empresa.
-2. En vercel.com: Add New → Project → importar el repositorio (Vercel detecta Astro solo).
-3. En el proyecto: Settings → Domains → agregar `diialitoral.com` y `www.diialitoral.com`.
+2. En dash.cloudflare.com: Workers y Pages → Crear → Pages → Conectar con Git → elegir el repositorio.
+3. Configuración de compilación: preset **Astro**, comando `npm run build`, carpeta de salida `dist`.
+4. Variable de entorno `SITE_URL` con la dirección oficial (por ejemplo `https://diia-litoral.pages.dev`,
+   y más adelante `https://diialitoral.com`). Después de cambiarla, volver a implementar.
+5. Para el dominio propio: en el proyecto de Pages → Dominios personalizados → agregar `diialitoral.com`.
 
-Las direcciones del sitio viejo (`/blog/...`, `/elements`, `/contact`) redirigen a las nuevas (ver `vercel.json`).
+Las direcciones del sitio viejo (`/blog/...`, `/elements`, `/contact`) redirigen a las nuevas (ver `public/_redirects`).

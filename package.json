@@ -1,8 +1,8 @@
 {
-  "name": "bigspring-light-astro",
-  "version": "4.0.2",
-  "description": "astro personal blog theme",
-  "author": "themefisher",
+  "name": "diia-litoral-web",
+  "version": "1.0.0",
+  "description": "Sitio web de Diia Litoral SRL",
+  "author": "Diia Litoral SRL",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -10,9 +10,7 @@
     "build": "astro build",
     "format": "prettier -w .",
     "check": "astro check",
-    "preview": "astro preview",
-    "deploy:cf-workers": "npm run build && wrangler deploy",
-    "preview:cf-workers": "npm run build && wrangler dev"
+    "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/check": "0.9.9",
@@ -48,7 +46,6 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.1",
-    "typescript": "^6.0.3",
-    "wrangler": "^4.105.0"
+    "typescript": "^6.0.3"
   }
 }
