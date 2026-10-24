@@ -1,0 +1,34 @@
+<!-- Activa las animaciones solo si hay JavaScript (sin JS, todo se ve normal) -->
+<script is:inline>
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("anim");
+</script>
+<script>
+  function iniciarAnimaciones() {
+    const contar = (el: HTMLElement) => {
+      const fin = Number(el.dataset.contar);
+      const sufijo = el.dataset.sufijo || "";
+      const inicio = performance.now();
+      const dur = 1400;
+      const paso = (t: number) => {
+        const p = Math.min((t - inicio) / dur, 1);
+        el.textContent = Math.round(fin * (1 - Math.pow(1 - p, 3))) + sufijo;
+        if (p < 1) requestAnimationFrame(paso);
+      };
+      requestAnimationFrame(paso);
+    };
+    const anim = document.documentElement.classList.contains("anim");
+    const obs = new IntersectionObserver(
+      (entradas) =>
+        entradas.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const el = e.target as HTMLElement;
+          el.classList.add("visible");
+          el.querySelectorAll<HTMLElement>("[data-contar]").forEach((n) => anim && contar(n));
+          obs.unobserve(el);
+        }),
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+    );
+    document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+  }
+  document.addEventListener("astro:page-load", iniciarAnimaciones);
+</script>
