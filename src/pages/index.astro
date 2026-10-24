@@ -10,11 +10,6 @@ import { foto } from "@/lib/imagenes";
 import { Swiper, SwiperWrapper, SwiperSlide, SwiperPagination } from "astro-swiper";
 import type { SwiperOptions } from "swiper/types";
 
-const opcionesHero: SwiperOptions = {
-  autoplay: { delay: 4500 },
-  loop: true,
-  pagination: { type: "bullets", el: ".hero-carousel .pagination", clickable: true },
-};
 const opcionesProductos: SwiperOptions = {
   autoplay: { delay: 3500 },
   loop: true,
@@ -31,55 +26,54 @@ const industrias = [
   { nombre: "Tratamiento de aguas", icono: "aguas", texto: "Insumos químicos para procesos de tratamiento, con soporte técnico para su aplicación." },
 ];
 
+const pasos = [
+  { icono: "asesoria", titulo: "Nos cuenta qué necesita", texto: "Su producto, su proceso y el resultado que busca: más vida útil, otra textura, un costo menor." },
+  { icono: "medida", titulo: "Le proponemos la solución", texto: "Recomendamos el insumo y el grado adecuados, con ficha técnica y asesoramiento para su aplicación." },
+  { icono: "entrega", titulo: "Entregamos y acompañamos", texto: "Despachamos desde Santa Fe y seguimos disponibles para ajustar la formulación en su planta." },
+];
+
 const destacados = lineas.filter((l) =>
   ["acidulantes-y-reguladores-de-acidez", "conservantes", "gelificantes-y-espesantes", "colorantes"].includes(l.slug),
 );
 ---
 
 <Base>
-  <!-- Portada -->
-  <section class="section pb-[50px]">
-    <div class="container">
-      <div class="row text-center">
-        <div class="mx-auto lg:col-10">
-          <p class="eyebrow">Distribuidora de insumos químicos desde 2006</p>
-          <h1 class="mt-3 font-bold">Distribución de productos químicos para la industria alimenticia, farmacéutica y cosmética</h1>
-          <p class="lead mx-auto mt-5 max-w-[640px]">
-            Proveemos insumos de alta calidad y lo acompañamos con asesoramiento técnico, para que cada formulación funcione como usted necesita.
-          </p>
-          <div class="mt-7 flex flex-wrap justify-center gap-3">
-            <a class="btn btn-primary" href="/productos">Ver productos</a>
-            <a class="btn btn-outline-primary" href={waLink(config.contacto.whatsapp, "Hola Diia Litoral, quisiera pedir una cotización.")} target="_blank" rel="noopener">Pedir cotización</a>
-          </div>
+  <!-- Portada a pantalla completa -->
+  <section class="hero-full" aria-label="Presentación">
+    <div class="hero-fondos" aria-hidden="true">
+      {
+        fotosHero.map((f, i) => (
+          <Image src={foto(f)} widths={[800, 1400, 1920]} sizes="100vw" alt="" class="hero-fondo" style={`animation-delay:${i * 6}s`} loading={i === 0 ? "eager" : "lazy"} />
+        ))
+      }
+    </div>
+    <div class="hero-velo" aria-hidden="true"></div>
+    <div class="container relative">
+      <div class="hero-contenido">
+        <p class="eyebrow text-white/90">Distribuidora de insumos químicos desde 2006</p>
+        <h1 class="mt-3 font-black text-white">Distribución de productos químicos para la industria alimenticia, farmacéutica y cosmética</h1>
+        <p class="lead mt-5 max-w-[600px] text-white/85">
+          Proveemos insumos de alta calidad y lo acompañamos con asesoramiento técnico, para que cada formulación funcione como usted necesita.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a class="btn btn-primary" href="/productos">Ver productos</a>
+          <a class="btn-borde" href={waLink(config.contacto.whatsapp, "Hola Diia Litoral, quisiera pedir una cotización.")} target="_blank" rel="noopener">Pedir cotización</a>
         </div>
       </div>
-      <div class="hero-carousel mx-auto mt-12 max-w-[880px]">
-        <Swiper class=".hero-carousel" options={opcionesHero}>
-          <SwiperWrapper>
-            {
-              fotosHero.map((f, i) => (
-                <SwiperSlide>
-                  <div class="hero-media">
-                    <Image src={foto(f)} widths={[600, 900, 1400]} sizes="(max-width: 900px) 100vw, 880px" alt="Depósito de Diia Litoral con insumos químicos" loading={i === 0 ? "eager" : "lazy"} />
-                  </div>
-                </SwiperSlide>
-              ))
-            }
-          </SwiperWrapper>
-          <SwiperPagination class="pagination mt-4" />
-        </Swiper>
-      </div>
     </div>
+    <a href="#cifras" class="hero-bajar" aria-label="Ver más">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </a>
   </section>
 
   <!-- Cifras -->
-  <section class="cifras">
+  <section class="cifras" id="cifras">
     <div class="container">
       <div class="grid grid-cols-2 gap-8 py-10 md:grid-cols-4">
-        <div class="cifra"><strong>20</strong><span>años de trayectoria, desde 2006</span></div>
-        <div class="cifra"><strong>{lineas.length}</strong><span>líneas de producto</span></div>
-        <div class="cifra"><strong>4</strong><span>industrias que acompañamos</span></div>
-        <div class="cifra"><strong>100%</strong><span>asesoramiento técnico directo</span></div>
+        <div class="cifra reveal"><strong data-contar="20">20</strong><span>años de trayectoria, desde 2006</span></div>
+        <div class="cifra reveal"><strong data-contar={lineas.length}>{lineas.length}</strong><span>líneas de producto</span></div>
+        <div class="cifra reveal"><strong data-contar="4">4</strong><span>industrias que acompañamos</span></div>
+        <div class="cifra reveal"><strong data-contar="100" data-sufijo="%">100%</strong><span>asesoramiento técnico directo</span></div>
       </div>
     </div>
   </section>
@@ -87,14 +81,14 @@ const destacados = lineas.filter((l) =>
   <!-- Industrias -->
   <section class="section bg-light">
     <div class="container">
-      <div class="mx-auto max-w-[640px] text-center">
+      <div class="mx-auto max-w-[640px] text-center reveal">
         <p class="eyebrow">Industrias</p>
         <h2 class="mt-3">Socios estratégicos de la industria</h2>
       </div>
       <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {
-          industrias.map((ind) => (
-            <div class="industria">
+          industrias.map((ind, i) => (
+            <div class="industria reveal" style={`transition-delay:${i * 90}ms`}>
               <div class="industria-icon"><Icono nombre={ind.icono} /></div>
               <h3 class="h5">{ind.nombre}</h3>
               <p class="text-[15px]">{ind.texto}</p>
@@ -105,11 +99,33 @@ const destacados = lineas.filter((l) =>
     </div>
   </section>
 
+  <!-- Cómo trabajamos -->
+  <section class="section">
+    <div class="container">
+      <div class="mx-auto max-w-[640px] text-center reveal">
+        <p class="eyebrow">Cómo trabajamos</p>
+        <h2 class="mt-3">Del primer contacto a la entrega, con asesoramiento en cada paso</h2>
+      </div>
+      <ol class="pasos mt-12">
+        {
+          pasos.map((p, i) => (
+            <li class="paso reveal" style={`transition-delay:${i * 120}ms`}>
+              <div class="paso-icono"><Icono nombre={p.icono} /></div>
+              <span class="paso-num">Paso {i + 1}</span>
+              <h3 class="h5 mt-1">{p.titulo}</h3>
+              <p class="mt-2 text-[15px]">{p.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
   <!-- Productos -->
   <section class="section">
     <div class="container">
       <div class="items-center gap-12 md:grid md:grid-cols-2">
-        <div class="productos-carousel md:order-2">
+        <div class="productos-carousel md:order-2 reveal">
           <Swiper class=".productos-carousel" options={opcionesProductos}>
             <SwiperWrapper>
               {
@@ -125,7 +141,7 @@ const destacados = lineas.filter((l) =>
             <SwiperPagination class="pagination mt-4" />
           </Swiper>
         </div>
-        <div class="mt-8 md:order-1 md:mt-0">
+        <div class="mt-8 md:order-1 md:mt-0 reveal">
           <p class="eyebrow">Productos</p>
           <h2 class="mt-3 font-bold">Sabemos que cada formulación es única, por eso ofrecemos productos de alta calidad</h2>
           <p class="mt-4">
@@ -143,14 +159,28 @@ const destacados = lineas.filter((l) =>
     </div>
   </section>
 
+  <!-- Frase destacada -->
+  <section class="frase" aria-label="Nuestra misión">
+    <Image src={foto("bidones-plastico.jpg")} widths={[800, 1400, 1920]} sizes="100vw" alt="" class="frase-fondo" loading="lazy" />
+    <div class="frase-velo" aria-hidden="true"></div>
+    <div class="container relative">
+      <figure class="frase-contenido reveal">
+        <blockquote>
+          Insumos químicos de calidad y soporte técnico especializado para optimizar los procesos productivos de nuestros clientes.
+        </blockquote>
+        <figcaption>Nuestra misión · Diia Litoral SRL</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <!-- Empresa -->
   <section class="section bg-light">
     <div class="container">
       <div class="items-center gap-12 md:grid md:grid-cols-2">
-        <div class="hero-media">
+        <div class="hero-media reveal">
           <Image src={foto("deposito.jpg")} widths={[500, 800, 1100]} sizes="(max-width: 768px) 100vw, 540px" alt="Depósito de Diia Litoral en Santa Fe" loading="lazy" />
         </div>
-        <div class="mt-8 md:mt-0">
+        <div class="mt-8 md:mt-0 reveal">
           <p class="eyebrow">Nuestra empresa</p>
           <h2 class="mt-3 font-bold">Comprometidos con la calidad en la distribución</h2>
           <p class="mt-4">
