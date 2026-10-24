@@ -34,6 +34,14 @@ const c = config.contacto;
               <input id="c-empresa" class="form-input" name="empresa" autocomplete="organization" />
             </div>
             <div>
+              <label for="c-email">Correo electrónico</label>
+              <input id="c-email" class="form-input" type="email" name="email" autocomplete="email" required />
+            </div>
+            <div>
+              <label for="c-telefono">Teléfono <span class="font-normal text-text/70">(opcional)</span></label>
+              <input id="c-telefono" class="form-input" type="tel" name="telefono" autocomplete="tel" />
+            </div>
+            <div>
               <label for="c-industria">Industria</label>
               <select id="c-industria" class="form-select" name="industria">
                 <option>Alimenticia</option>
@@ -55,15 +63,21 @@ const c = config.contacto;
               <textarea id="c-mensaje" class="form-textarea" name="mensaje" rows="5" required placeholder="Producto, cantidad aproximada y para qué aplicación lo necesita."></textarea>
             </div>
           </div>
-          <p id="c-error" class="mt-4 text-sm font-bold text-[#c0392b]" hidden>Complete su nombre y su consulta para enviarla.</p>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px" />
+          <p id="c-error" class="mt-4 text-sm font-bold text-[#c0392b]" role="alert" hidden></p>
           <div class="mt-6 flex flex-wrap gap-3">
-            <a id="c-wa" class="btn btn-primary inline-flex items-center gap-2" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">
-              <span class="h-5 w-5"><Icono nombre="whatsapp" /></span> Enviar por WhatsApp
+            <button id="c-enviar" type="submit" class="btn btn-primary">Enviar consulta</button>
+            <a id="c-wa" class="btn btn-outline-primary inline-flex items-center gap-2" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">
+              <span class="h-5 w-5"><Icono nombre="whatsapp" /></span> Prefiero WhatsApp
             </a>
-            <a id="c-mail" class="btn btn-outline-primary" href={`mailto:${c.email_ventas}`}>Enviar por correo</a>
           </div>
-          <p class="mt-3 text-sm">Se abre WhatsApp o su correo con la consulta ya escrita, lista para enviar a nuestro equipo de ventas.</p>
+          <p class="mt-3 text-sm">Su consulta llega directo al correo de nuestro equipo de ventas y le respondemos a la brevedad.</p>
         </form>
+        <div id="c-ok" class="self-start rounded-3xl border border-border bg-white p-6 text-center shadow md:p-9" role="status" hidden>
+          <span class="industria-icon mx-auto"><Icono nombre="mail" /></span>
+          <h2 class="h4 mt-4">¡Gracias! Recibimos su consulta</h2>
+          <p class="mt-3">Nuestro equipo de ventas le va a responder por correo a la brevedad. Si es urgente, escríbanos por <a class="font-bold text-primary" href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a>.</p>
+        </div>
 
         <div class="mt-10 grid content-start gap-4 lg:mt-0">
           <div class="dato-contacto">
@@ -88,15 +102,18 @@ const c = config.contacto;
   </section>
 </Base>
 
-<script define:vars={{ wa: c.whatsapp, mail: c.email_ventas }}>
+<script define:vars={{ wa: c.whatsapp, destino: c.email_ventas }}>
   function initForm() {
     const form = document.getElementById("form-contacto");
-    if (!form) return;
+    if (!form || form.dataset.listo) return;
+    form.dataset.listo = "1";
     const v = (id) => document.getElementById(id).value.trim();
     const linkWa = document.getElementById("c-wa");
-    const linkMail = document.getElementById("c-mail");
+    const boton = document.getElementById("c-enviar");
     const error = document.getElementById("c-error");
-    const actualizar = () => {
+    const ok = document.getElementById("c-ok");
+    const mostrarError = (t) => { error.textContent = t; error.hidden = !t; };
+    const actualizarWa = () => {
       const texto = [
         "Hola Diia Litoral, quisiera hacer una consulta.",
         v("c-nombre") && "Nombre: " + v("c-nombre"),
@@ -106,19 +123,47 @@ const c = config.contacto;
         v("c-mensaje") && "Consulta: " + v("c-mensaje"),
       ].filter(Boolean).join("\n");
       linkWa.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(texto);
-      linkMail.href = "mailto:" + mail + "?subject=" + encodeURIComponent("Consulta web" + (v("c-nombre") ? " de " + v("c-nombre") : "")) + "&body=" + encodeURIComponent(texto);
     };
-    const validar = (e) => {
-      const falta = !v("c-nombre") || !v("c-mensaje");
-      error.hidden = !falta;
-      if (falta) e.preventDefault();
-    };
-    form.addEventListener("input", actualizar);
-    form.addEventListener("change", actualizar);
-    form.addEventListener("submit", (e) => e.preventDefault());
-    linkWa.addEventListener("click", validar);
-    linkMail.addEventListener("click", validar);
-    actualizar();
+    form.addEventListener("input", actualizarWa);
+    form.addEventListener("change", actualizarWa);
+    actualizarWa();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!v("c-nombre") || !v("c-email") || !v("c-mensaje")) return mostrarError("Complete su nombre, su correo y su consulta para enviarla.");
+      if (!document.getElementById("c-email").checkValidity()) return mostrarError("Revise el correo electrónico: parece incompleto.");
+      mostrarError("");
+      boton.disabled = true;
+      boton.textContent = "Enviando…";
+      const datos = {
+        Nombre: v("c-nombre"),
+        Empresa: v("c-empresa") || "-",
+        email: v("c-email"),
+        "Teléfono": v("c-telefono") || "-",
+        Industria: v("c-industria"),
+        "Línea de producto": v("c-linea"),
+        Consulta: v("c-mensaje"),
+        _subject: "Consulta web de " + v("c-nombre") + (v("c-empresa") ? " (" + v("c-empresa") + ")" : ""),
+        _template: "table",
+        _honey: form.elements["_honey"].value,
+      };
+      try {
+        const r = await fetch("https://formsubmit.co/ajax/" + destino, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(datos),
+        });
+        const res = await r.json().catch(() => ({}));
+        if (!r.ok || String(res.success) !== "true") throw new Error(res.message || "error");
+        form.hidden = true;
+        ok.hidden = false;
+        ok.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (err) {
+        mostrarError("No pudimos enviar la consulta en este momento. Puede enviarla por WhatsApp con el botón de al lado, o escribirnos a " + destino + ".");
+        boton.disabled = false;
+        boton.textContent = "Enviar consulta";
+      }
+    });
   }
   document.addEventListener("astro:page-load", initForm);
 </script>
