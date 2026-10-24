@@ -433,3 +433,133 @@
     animation: none !important;
   }
 }
+
+/* ===== Portada a pantalla completa ===== */
+.hero-full {
+  @apply relative flex items-center overflow-hidden bg-text-dark;
+  min-height: min(calc(100svh - 76px), 760px);
+  padding-block: 96px 120px;
+}
+.hero-fondos,
+.hero-velo {
+  @apply absolute inset-0;
+}
+.hero-fondo {
+  @apply absolute inset-0 h-full w-full object-cover opacity-0;
+  animation: hero-cambio 18s infinite;
+}
+.hero-fondo:first-child {
+  @apply opacity-100;
+}
+@keyframes hero-cambio {
+  0% { opacity: 0; transform: scale(1.06); }
+  6% { opacity: 1; }
+  33% { opacity: 1; }
+  40% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; }
+}
+.hero-fondo:first-child {
+  animation-name: hero-cambio-primera;
+}
+@keyframes hero-cambio-primera {
+  0% { opacity: 1; transform: scale(1.06); }
+  33% { opacity: 1; }
+  40% { opacity: 0; transform: scale(1); }
+  94% { opacity: 0; }
+  100% { opacity: 1; transform: scale(1.06); }
+}
+.hero-velo {
+  background:
+    linear-gradient(90deg, rgba(20, 26, 32, 0.88) 0%, rgba(20, 26, 32, 0.62) 55%, rgba(20, 26, 32, 0.3) 100%),
+    linear-gradient(0deg, rgba(20, 26, 32, 0.45), transparent 40%);
+}
+.hero-contenido {
+  @apply relative max-w-[720px];
+}
+.hero-contenido h1 {
+  @apply text-[2.1rem] leading-[1.12] md:text-[3.2rem];
+  text-wrap: balance;
+}
+.hero-bajar {
+  @apply absolute left-1/2 -translate-x-1/2 text-white/80 transition hover:text-white;
+  bottom: 22px;
+}
+.hero-bajar svg {
+  @apply h-9 w-9;
+  animation: rebote 2.2s ease-in-out infinite;
+}
+@keyframes rebote {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ===== Cómo trabajamos ===== */
+.pasos {
+  @apply relative grid gap-8 md:grid-cols-3;
+  list-style: none;
+  padding: 0;
+}
+@media (min-width: 768px) {
+  .pasos::before {
+    content: "";
+    @apply absolute left-[16%] right-[16%] top-9 border-t-2 border-dashed border-primary/30;
+  }
+}
+.paso {
+  @apply relative text-center;
+}
+.paso-icono {
+  @apply relative z-[1] mx-auto flex h-[72px] w-[72px] items-center justify-center rounded-full bg-primary text-white;
+  box-shadow: 0 0 0 8px var(--color-body), 0 12px 24px -8px color-mix(in srgb, var(--color-primary) 55%, transparent);
+}
+.paso-icono svg {
+  @apply h-8 w-8;
+}
+.paso-num {
+  @apply mt-5 block text-xs font-bold tracking-[0.14em] text-primary uppercase;
+}
+.paso p {
+  @apply mx-auto max-w-[300px];
+}
+
+/* ===== Frase destacada ===== */
+.frase {
+  @apply relative overflow-hidden py-24 md:py-32;
+}
+.frase-fondo {
+  @apply absolute inset-0 h-full w-full object-cover;
+}
+.frase-velo {
+  @apply absolute inset-0;
+  background: linear-gradient(120deg, rgba(20, 26, 32, 0.9), rgba(20, 26, 32, 0.7) 60%, color-mix(in srgb, var(--color-primary) 55%, transparent));
+}
+.frase-contenido {
+  @apply mx-auto max-w-[860px] text-center;
+}
+.frase-contenido blockquote {
+  @apply text-[1.55rem] leading-snug font-bold text-white md:text-[2.2rem];
+  text-wrap: balance;
+}
+.frase-contenido blockquote::before {
+  content: "“";
+  @apply mb-2 block text-6xl leading-none text-primary;
+}
+.frase-contenido figcaption {
+  @apply mt-6 text-sm font-bold tracking-[0.14em] text-white/70 uppercase;
+}
+
+/* ===== Animaciones al bajar ===== */
+html.anim .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+html.anim .reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.anim .reveal { opacity: 1; transform: none; }
+  .hero-fondo { animation: none !important; }
+  .hero-fondo:not(:first-child) { display: none; }
+}
