@@ -44,9 +44,38 @@ const { title, meta_title, description, image, noindex, canonical } =
       )
     }
     <!-- favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96.png" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="icon" type="image/png" href={config.site.favicon} />
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <!-- datos para Google: nombre del sitio y logotipo -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify([
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Diia Litoral SRL",
+          alternateName: ["Diia Litoral", "DIIA LITORAL"],
+          url: new URL("/", Astro.site).href,
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Diia Litoral SRL",
+          url: new URL("/", Astro.site).href,
+          logo: new URL("/images/logo-diia-litoral-cuadrado.png", Astro.site).href,
+          image: new URL(config.metadata.meta_image, Astro.site).href,
+          description: config.metadata.meta_description,
+          foundingDate: "2006",
+          email: config.contacto.email_ventas,
+          telephone: "+" + config.contacto.whatsapp,
+          address: { "@type": "PostalAddress", addressLocality: "Santa Fe", addressRegion: "Santa Fe", addressCountry: "AR" },
+          sameAs: [config.contacto.linkedin],
+        },
+      ])}
+    />
     <!-- theme meta -->
         <meta name="msapplication-TileColor" content="#000000" />
     <meta
